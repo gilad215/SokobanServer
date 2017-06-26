@@ -35,7 +35,9 @@ public class Server extends Observable{
                                 aClient.getInputStream().close();
                                 aClient.getOutputStream().close();
                                 aClient.close();
-                            } catch (IOException e) {}
+                            } catch (IOException e) {} catch (ClassNotFoundException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }).start();
                 }

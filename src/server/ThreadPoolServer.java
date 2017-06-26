@@ -1,79 +1,72 @@
 package server;
+import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+public class ThreadPoolServer {
+    private int port = 8080;
+    private ClientHandler ch;
+    private boolean isStopped = false;
+    private ExecutorService threadPool = null;
 
 
 
-public class ThreadPoolServer implements Runnable{
-    protected int          serverPort   = 8080;
-    protected ServerSocket serverSocket = null;
-    protected boolean      isStopped    = false;
-    protected Thread       runningThread= null;
-    protected ExecutorService threadPool = Executors.newFixedThreadPool(10);
-
-    protected ClientHandler ch;
-
-    public ThreadPoolServer(int port,ClientHandler clientHandler){
-        this.serverPort = port;
-        this.ch=clientHandler;
+    public ThreadPoolServer(int port, ClientHandler clientHandler) {
+        this.port = port;
+        this.ch = clientHandler;
+        this.threadPool = Executors.newFixedThreadPool(30);
     }
 
-
-    @Override
-    public void run() {
-        synchronized (this)
+    public void runServer() throws Exception
+    {
+        InetAddress addr = InetAddress.getByName("127.0.0.1");
+        ServerSocket server=new ServerSocket(8080,50,addr);
+        System.out.println("SERVER UP");
+        System.out.println(server.getLocalSocketAddress());
+        System.out.println(server.getInetAddress());
+        server.setSoTimeout(1000);
+        while(!isStopped)
         {
-            this.runningThread=Thread.currentThread();
-        }
-        openServerSocket();
-        while(!isStopped()){
-            Socket aClient = null;
-            try {
-                aClient = this.serverSocket.accept();
-                System.out.println("Client Connected.");
-            } catch (IOException e) {
-                if(isStopped()) {
-                    System.out.println("Server Stopped.") ;
-                    break;
-                }
-                throw new RuntimeException(
-                        "Error accepting client connection", e);
-            }
-            try {
-                this.threadPool.execute(ch.handleClient(aClient.getInputStream(), aClient.getOutputStream()));
-                aClient.getInputStream().close();
-                aClient.getOutputStream().close();
-                aClient.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            try
+            {
+                Socket aClient=server.accept();
+                threadPool.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            System.out.println("TRYING TO FETCH DATA");
+                            ch.handleClient(aClient.getInputStream(),aClient.getOutputStream());
+                            aClient.getOutputStream().close();
+                            aClient.getInputStream().close();
+                            aClient.close();
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
 
+                    }
+                });
+            } catch (SocketTimeoutException ignored){}
         }
-        this.threadPool.shutdown();
-        System.out.println("Server Stopped.") ;
+        server.close();
     }
 
-
-    private synchronized boolean isStopped() {
-        return this.isStopped;
-    }
-
-    public synchronized void stop(){
-        this.isStopped = true;
-        try {
-            this.serverSocket.close();
-        } catch (IOException e) {
-            throw new RuntimeException("Error closing server", e);
+    public void stopServer()
+    {
+        threadPool.shutdown();
+        try{
+            threadPool.awaitTermination(5, TimeUnit.SECONDS);
+        } catch (InterruptedException e ) {e.printStackTrace();}
+        finally {
+            isStopped=true;
         }
     }
-    private void openServerSocket() {
-        try {
-            this.serverSocket = new ServerSocket(this.serverPort);
-        } catch (IOException e) {
-            throw new RuntimeException("Cannot open port:"+serverPort, e);
-        }
-    }
+
 }
+
+
+
