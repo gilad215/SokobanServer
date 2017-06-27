@@ -25,7 +25,7 @@ public class ThreadPoolServer {
     public void runServer() throws Exception
     {
         InetAddress addr = InetAddress.getByName("127.0.0.1");
-        ServerSocket server=new ServerSocket(8080,50,addr);
+        ServerSocket server=new ServerSocket(8021,50,addr);
         System.out.println("SERVER UP");
         System.out.println(server.getLocalSocketAddress());
         System.out.println(server.getInetAddress());
@@ -39,7 +39,7 @@ public class ThreadPoolServer {
                     @Override
                     public void run() {
                         try {
-                            System.out.println("TRYING TO FETCH DATA");
+                            System.out.println("Client CONNECTED");
                             ch.handleClient(aClient.getInputStream(),aClient.getOutputStream());
                             aClient.getOutputStream().close();
                             aClient.getInputStream().close();

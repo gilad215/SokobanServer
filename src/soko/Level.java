@@ -9,6 +9,7 @@ public class Level implements Serializable{
 
     private ArrayList<Point> goals;
     private ArrayList<ArrayList<Character>> board;
+    private String name;
 
 
     public Level(ArrayList<ArrayList<Character>> board) {
@@ -73,6 +74,18 @@ public class Level implements Serializable{
             }
         }
         return null;
+    }
+
+    public void setGoals(ArrayList<Point> goals) {
+        this.goals = goals;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

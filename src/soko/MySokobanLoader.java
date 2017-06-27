@@ -1,5 +1,6 @@
 package soko;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -33,7 +34,8 @@ public class MySokobanLoader implements Loader {
 
     @Override
     public void load() {
-        String extension = pathToFile;
+        setLevelname();
+       String extension = pathToFile;
         int i = extension.lastIndexOf('.');
         if (i > 0) {
             extension = extension.substring(i+1);    //gets the string after a '.'
@@ -58,6 +60,13 @@ public class MySokobanLoader implements Loader {
         }
     }
 
+    private void setLevelname()
+    {
+        File file=new File(pathToFile);
+        int i=file.getName().indexOf('.');
+        this.lvl.setName(file.getName().substring(0,i));
+        System.out.println("LEVEL NAME:"+lvl.getName());
+    }
 
 }
 
