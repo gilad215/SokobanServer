@@ -1,4 +1,4 @@
-package soko;
+package model.data;
 
 import java.io.Serializable;
 import java.util.Objects;

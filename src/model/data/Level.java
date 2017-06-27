@@ -1,4 +1,4 @@
-package soko;
+package model.data;
 
 
 
@@ -10,6 +10,8 @@ public class Level implements Serializable{
     private ArrayList<Point> goals;
     private ArrayList<ArrayList<Character>> board;
     private String name;
+    private static final long serialVersionUID = 1113799434508676095L;
+
 
 
     public Level(ArrayList<ArrayList<Character>> board) {

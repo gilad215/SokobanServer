@@ -1,4 +1,4 @@
-package soko;
+package model.data;
 
 public interface Displayer {
     void display();

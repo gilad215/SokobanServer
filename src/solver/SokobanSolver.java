@@ -1,11 +1,9 @@
 package solver;
 
 
-import soko.Level;
-import soko.MySokobanLoader;
+import model.data.Level;
 import strips.strips.*;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 

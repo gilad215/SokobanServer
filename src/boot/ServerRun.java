@@ -1,7 +1,7 @@
 package boot;
 
-import server.SokoClientHandler;
-import server.ThreadPoolServer;
+import server.sokoserver.SokoClientHandler;
+import server.sokoserver.ThreadPoolServer;
 
 public class ServerRun {
     public static void main(String[] args) throws Exception {

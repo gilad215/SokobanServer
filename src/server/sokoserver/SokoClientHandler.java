@@ -1,12 +1,12 @@
-package server;
+package server.sokoserver;
 
-import org.glassfish.jersey.client.ClientResponse;
-import soko.Level;
-import solver.SokobanPlannable;
+import db.TableUtil;
+import db.User;
+import javafx.application.Platform;
+import model.data.Level;
 import solver.SokobanSolver;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 import javax.ws.rs.client.Client;
@@ -17,6 +17,7 @@ import javax.ws.rs.core.*;
 
 public class SokoClientHandler implements ClientHandler {
     private Level lvl;
+    private TableUtil tableUtil=new TableUtil();
 
 
     @Override
@@ -24,38 +25,52 @@ public class SokoClientHandler implements ClientHandler {
         ObjectOutputStream oos=new ObjectOutputStream(out);
         ObjectInputStream ois=new ObjectInputStream(in);
 
-        this.lvl=new Level((ArrayList<ArrayList<Character>>)ois.readObject());
-        if(lvl!=null)
-        {
-            lvl.setName("level4");
+        Object input=ois.readObject();
+        if(input instanceof Level) {
+            this.lvl = (Level) input;
             System.out.println("Level Detected.");
             System.out.println("Checking Web Service");
 
-            String solution=getSolutionFromService(lvl.getName());
-            if(solution==null)
-            {
+            String solution = getSolutionFromService(lvl.getName());
+            if (solution == null) {
                 System.out.println("No Solution, Calling strips");
-                SokobanSolver solver=new SokobanSolver(lvl);
+                SokobanSolver solver = new SokobanSolver(lvl);
                 System.out.println("CLIENT GOT SOLUTION");
-                StringBuilder finalsolution= new StringBuilder();
-                LinkedList<String> list=solver.solve();
-                for (String s:list) {
+                StringBuilder finalsolution = new StringBuilder();
+                LinkedList<String> list = solver.solve();
+                for (String s : list) {
                     finalsolution.append(s);
                     finalsolution.append(" ");
                 }
 
-                String url="http://localhost:8080/resources/solutions";
-                Client client =ClientBuilder.newClient();
-                WebTarget target=client.target(url);
-                MultivaluedHashMap<String,String> formdata=new MultivaluedHashMap<>();
-                formdata.add("name",lvl.getName());
-                formdata.add("solution",finalsolution.toString());
-                Response response=target.request().post(Entity.form(formdata));
+                String url = "http://localhost:8080/resources/solutions";
+                Client client = ClientBuilder.newClient();
+                WebTarget target = client.target(url);
+                MultivaluedHashMap<String, String> formdata = new MultivaluedHashMap<>();
+                formdata.add("name", lvl.getName());
+                formdata.add("solution", finalsolution.toString());
+                Response response = target.request().post(Entity.form(formdata));
                 oos.writeObject(finalsolution.toString());
-            }
-            else{
+            } else {
                 oos.writeObject(solution);
                 System.out.println("Solution Already Made, Sending..");
+            }
+        }
+        else {
+            if (input instanceof User) {
+                User gamer = (User) input;
+                tableUtil.addUser(gamer);
+            } if(input instanceof String){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            tableUtil.showLeaderboard();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
             }
         }
     }

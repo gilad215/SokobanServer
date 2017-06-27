@@ -3,10 +3,10 @@ package solver;
 import searchLib.BFS;
 import searchLib.SearchAction;
 import searchLib.Solution;
-import soko.Level;
-import soko.MySokobanDisplay;
-import soko.MySokobanPolicy;
-import soko.Point;
+import model.data.Level;
+import model.data.MySokobanDisplay;
+import model.data.MySokobanPolicy;
+import model.data.Point;
 import strips.strips.*;
 
 import java.util.ArrayList;
@@ -171,7 +171,7 @@ public class SokobanPlannable implements Plannable {
                        }
                        else
                        {
-                           System.out.println("didnt find path for soko to box");
+                           System.out.println("didnt find path for model to box");
                            break;
                        }
                    }
@@ -201,7 +201,7 @@ public class SokobanPlannable implements Plannable {
             List<Action> actions=new ArrayList<>();
 
             Point sokobanPos=initialSoko;
-            for (SearchAction sAction:sokoActions) { //soko path
+            for (SearchAction sAction:sokoActions) { //model path
 
 
                 Action predicate=new Action();
@@ -257,7 +257,7 @@ public class SokobanPlannable implements Plannable {
         if (type.equals("sokobanAt")) {
             System.out.println("SEARCHING FOR SOKO MY LOVELY HERO~~~~~~~~~~~~~~~~");
             System.out.println("INITIAL SOKO POS:" + initial.toString() + " TARGET BOX POS:" + target.toString());
-            Search = new SokobanSearchable<>(level, "soko", initial, target);
+            Search = new SokobanSearchable<>(level, "model", initial, target);
         }
 
         BFS<Point> searcher = new BFS<>();

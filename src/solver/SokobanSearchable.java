@@ -3,9 +3,9 @@ package solver;
 import searchLib.SearchAction;
 import searchLib.Searchable;
 import searchLib.State;
-import soko.Level;
-import soko.MySokobanDisplay;
-import soko.Point;
+import model.data.Level;
+import model.data.MySokobanDisplay;
+import model.data.Point;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -130,7 +130,7 @@ public class SokobanSearchable<T> implements Searchable<T> {
             }
 
         }
-        else //soko
+        else //model
         {
             //display.display();
             switch (level.getBoard().get(point.getY()).get(point.getX() - 1)) //Checks Left of State

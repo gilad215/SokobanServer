@@ -1,4 +1,5 @@
-package server;
+package server.sokoserver;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -25,7 +26,7 @@ public class ThreadPoolServer {
     public void runServer() throws Exception
     {
         InetAddress addr = InetAddress.getByName("127.0.0.1");
-        ServerSocket server=new ServerSocket(8021,50,addr);
+        ServerSocket server=new ServerSocket(port,50,addr);
         System.out.println("SERVER UP");
         System.out.println(server.getLocalSocketAddress());
         System.out.println(server.getInetAddress());
