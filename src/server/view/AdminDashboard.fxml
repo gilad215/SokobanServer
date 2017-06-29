@@ -8,8 +8,12 @@
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="server.view.DashboardController">
 	 <children>
-        <Button fx:id="button" layoutX="14.0" layoutY="160.0" onAction="#handleButtonAction" prefHeight="26.0" prefWidth="100.0" text="Click Me!" />
-      <ListView fx:id="myListView" layoutX="14.0" layoutY="21.0" prefHeight="109.0" prefWidth="100.0" />
+        <Button fx:id="button" layoutX="14.0" layoutY="200.0" onAction="#handleButtonAction" prefHeight="26.0" prefWidth="160.0" text="Update List" />
+         <Button fx:id="disconnect" layoutX="14.0" layoutY="160.0" onAction="#disconnectButtonAction" prefHeight="26.0"
+                 prefWidth="160.0" text="Disconnect Client"/>
+         <Button fx:id="killserver" layoutX="14.0" layoutY="240.0" onAction="#killServer" prefHeight="26.0"
+                 prefWidth="160.0" text="Kill Server"/>
+         <ListView fx:id="myListView" layoutX="14.0" layoutY="21.0" prefHeight="109.0" prefWidth="100.0" />
     </children>
 </AnchorPane>
 

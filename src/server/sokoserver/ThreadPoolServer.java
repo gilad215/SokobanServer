@@ -1,5 +1,8 @@
 package server.sokoserver;
 
+import javafx.application.Platform;
+import server.model.AdminModel;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -14,12 +17,15 @@ public class ThreadPoolServer {
     private ClientHandler ch;
     private boolean isStopped = false;
     private ExecutorService threadPool = null;
+    private AdminModel model;
+
 
 
 
     public ThreadPoolServer(int port, ClientHandler clientHandler) {
         this.port = port;
         this.ch = clientHandler;
+        model=AdminModel.getInstance();
         this.threadPool = Executors.newFixedThreadPool(30);
     }
 
@@ -31,7 +37,7 @@ public class ThreadPoolServer {
         System.out.println(server.getLocalSocketAddress());
         System.out.println(server.getInetAddress());
         server.setSoTimeout(1000);
-        while(!isStopped)
+        while(!model.isStopped())
         {
             try
             {
@@ -40,11 +46,10 @@ public class ThreadPoolServer {
                     @Override
                     public void run() {
                         try {
-                            System.out.println("Client CONNECTED");
+                            System.out.println("Client CONNECTED, Client IP:"+aClient.getRemoteSocketAddress().toString());
+                            model.addClient(aClient.getRemoteSocketAddress().toString(),aClient);
+                            System.out.println(model.getClients().toString());
                             ch.handleClient(aClient.getInputStream(),aClient.getOutputStream());
-                            aClient.getOutputStream().close();
-                            aClient.getInputStream().close();
-                            aClient.close();
                         } catch (IOException | ClassNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -53,11 +58,13 @@ public class ThreadPoolServer {
                 });
             } catch (SocketTimeoutException ignored){}
         }
-        server.close();
+        stopServer();
+        Platform.exit();
     }
 
     public void stopServer()
     {
+        System.out.println("Shutting Down Server..");
         threadPool.shutdown();
         try{
             threadPool.awaitTermination(5, TimeUnit.SECONDS);

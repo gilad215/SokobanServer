@@ -6,7 +6,7 @@ import java.util.*;
 
 public class AdminModel {
     private Map<String,Socket> connectedClients=new HashMap<>();
-
+    private boolean isStopped=false;
     private static final AdminModel instance=new AdminModel();
     private AdminModel(){}
     public static AdminModel getInstance(){return instance;}
@@ -22,12 +22,23 @@ public class AdminModel {
 
     public void disconnectClient(String username)
     {
-        Socket socket=connectedClients.get(username);
+        Socket user=connectedClients.remove(username);
+        System.out.println("Disconnecting Client "+user.getRemoteSocketAddress().toString()+"..");
         try {
-            socket.close();
+            user.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if(user.isClosed())System.out.println("Disconnected Successfully");
+        else System.out.println("Client Has Not Disconnected");
 
+    }
+
+    public boolean isStopped() {
+        return isStopped;
+    }
+
+    public void setStopped(boolean stopped) {
+        isStopped = stopped;
     }
 }
