@@ -1,8 +1,5 @@
 package server.sokoserver;
 
-import db.TableUtil;
-import db.User;
-import javafx.application.Platform;
 import model.data.Level;
 import solver.SokobanSolver;
 
@@ -17,16 +14,14 @@ import javax.ws.rs.core.*;
 
 public class SokoClientHandler implements ClientHandler {
     private Level lvl;
-    private TableUtil tableUtil=new TableUtil();
-
 
     @Override
     public void handleClient(InputStream in, OutputStream out) throws IOException, ClassNotFoundException {
-        ObjectOutputStream oos=new ObjectOutputStream(out);
-        ObjectInputStream ois=new ObjectInputStream(in);
+        ObjectOutputStream oos = new ObjectOutputStream(out);
+        ObjectInputStream ois = new ObjectInputStream(in);
 
-        Object input=ois.readObject();
-        if(input instanceof Level) {
+        Object input = ois.readObject();
+        if (input instanceof Level) {
             this.lvl = (Level) input;
             System.out.println("Level Detected.");
             System.out.println("Checking Web Service");
@@ -56,24 +51,9 @@ public class SokoClientHandler implements ClientHandler {
                 System.out.println("Solution Already Made, Sending..");
             }
         }
-        else {
-            if (input instanceof User) {
-                User gamer = (User) input;
-                tableUtil.addUser(gamer);
-            } if(input instanceof String){
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            tableUtil.showLeaderboard();
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-        }
     }
+
+
 
     private void readInputsAndSend(BufferedReader in, PrintWriter out,String exitStr){
         try {

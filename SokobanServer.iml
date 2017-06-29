@@ -11,7 +11,7 @@
     <facet type="hibernate" name="Hibernate">
       <configuration>
         <datasource-map>
-          <unit-entry name="hibernate.cfg.xml" />
+          <unit-entry name="hibernate.cfg.xml" value="663b0125-0f9a-4d3f-8ee2-27f57e489aa0" />
         </datasource-map>
         <naming-strategy-map />
         <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/src/hibernate.cfg.xml" />
@@ -45,6 +45,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="antlr-2.7.7" level="project" />
-    <orderEntry type="library" name="osgi-resource-locator-1.0.1" level="project" />
+    <orderEntry type="library" name="hk2-locator-2.5.0-b36" level="project" />
   </component>
 </module>
