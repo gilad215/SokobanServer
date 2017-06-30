@@ -3,12 +3,10 @@ package solver;
 import searchLib.SearchAction;
 import searchLib.Searchable;
 import searchLib.State;
-import model.data.Level;
-import model.data.MySokobanDisplay;
-import model.data.Point;
 
 import java.util.HashMap;
 import java.util.Objects;
+import model.data.*;
 
 public class SokobanSearchable<T> implements Searchable<T> {
 

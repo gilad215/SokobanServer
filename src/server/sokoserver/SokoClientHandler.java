@@ -1,6 +1,5 @@
 package server.sokoserver;
 
-import model.data.Level;
 import solver.SokobanSolver;
 
 import java.io.*;
@@ -12,6 +11,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.*;
+import model.data.*;
 
 public class SokoClientHandler implements ClientHandler {
     private Level lvl;

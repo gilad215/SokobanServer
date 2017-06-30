@@ -1,11 +1,11 @@
 package solver;
 
 
-import model.data.Level;
 import strips.strips.*;
 
 import java.util.LinkedList;
 import java.util.List;
+import model.data.*;
 
 public class SokobanSolver {
 

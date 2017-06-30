@@ -3,16 +3,12 @@ package solver;
 import searchLib.BFS;
 import searchLib.SearchAction;
 import searchLib.Solution;
-import model.data.Level;
-import model.data.MySokobanDisplay;
-import model.data.MySokobanPolicy;
-import model.data.Point;
 import strips.strips.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
-
+import model.data.*;
 //import sun.security.mscapi.KeyStore;
 
 public class SokobanPlannable implements Plannable {
