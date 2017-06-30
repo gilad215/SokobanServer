@@ -34,7 +34,6 @@ public class MySokobanLoader implements Loader {
 
     @Override
     public void load() {
-        setLevelname();
        String extension = pathToFile;
         int i = extension.lastIndexOf('.');
         if (i > 0) {
@@ -60,13 +59,6 @@ public class MySokobanLoader implements Loader {
         }
     }
 
-    private void setLevelname()
-    {
-        File file=new File(pathToFile);
-        int i=file.getName().indexOf('.');
-        this.lvl.setName(file.getName().substring(0,i));
-        System.out.println("LEVEL NAME:"+lvl.getName());
-    }
 
 }
 

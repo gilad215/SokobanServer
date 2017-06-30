@@ -4,6 +4,7 @@ import model.data.Level;
 import solver.SokobanSolver;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import javax.ws.rs.client.Client;
@@ -21,9 +22,11 @@ public class SokoClientHandler implements ClientHandler {
         ObjectInputStream ois = new ObjectInputStream(in);
 
         Object input = ois.readObject();
-        if (input instanceof Level) {
-            this.lvl = (Level) input;
+        if (input instanceof ArrayList) {
+            this.lvl = new Level((ArrayList<ArrayList<Character>>)input);
+            this.lvl.setName();
             System.out.println("Level Detected.");
+            System.out.println("LEVEL:"+this.lvl.getName());
             System.out.println("Checking Web Service");
 
             String solution = getSolutionFromService(lvl.getName());
@@ -34,8 +37,13 @@ public class SokoClientHandler implements ClientHandler {
                 StringBuilder finalsolution = new StringBuilder();
                 LinkedList<String> list = solver.solve();
                 for (String s : list) {
-                    finalsolution.append(s);
-                    finalsolution.append(" ");
+                    switch(s)
+                    {
+                        case("up"): finalsolution.append("u"); break;
+                        case("right"):finalsolution.append(("r"));break;
+                        case("left"):finalsolution.append("l");break;
+                        case("down"):finalsolution.append("d");break;
+                    }
                 }
 
                 String url = "http://localhost:8080/resources/solutions";
@@ -75,6 +83,7 @@ public class SokoClientHandler implements ClientHandler {
 
     private String getSolutionFromService(String name)
     {
+        System.out.println("SEARCHING SOLUTION FOR:"+name);
         String url="http://localhost:8080/resources/solutions/"+name;
         Client client=ClientBuilder.newClient();
         WebTarget webTarget=client.target(url);

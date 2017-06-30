@@ -86,8 +86,22 @@ public class Level implements Serializable{
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName() {
+        StringBuilder name=new StringBuilder();
+        if(!board.isEmpty())
+        {
+            for (ArrayList<Character> arr:board) {
+                for (Character ch:arr) {
+                    if(ch==' ') name.append("0");
+                    if(ch=='@') name.append("@");
+                    if(ch=='A') name.append("A");
+                    if(ch=='o') name.append("o");
+                    if(ch=='#') name.append("1");
+                }
+            }
+            this.name=name.toString();
+        }
+
     }
 
 }

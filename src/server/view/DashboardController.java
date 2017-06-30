@@ -42,7 +42,7 @@ public class DashboardController implements Initializable {
     protected ListProperty<String> listProperty = new SimpleListProperty<>();
 
     @FXML
-    private void handleButtonAction(ActionEvent event) {
+    private void handleButtonAction(ActionEvent event) throws IOException {
     	updateList();
     }
 
@@ -70,11 +70,15 @@ public class DashboardController implements Initializable {
       
     	model = AdminModel.getInstance();      
         myListView.itemsProperty().bind(listProperty);
-        listProperty.set(FXCollections.observableArrayList(model.getClients()));
+        try {
+            listProperty.set(FXCollections.observableArrayList(model.getClients()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
     
-    private void updateList() {
+    private void updateList() throws IOException {
         listProperty.set(FXCollections.observableArrayList(model.getClients()));
     }
 
